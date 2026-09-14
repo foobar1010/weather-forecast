@@ -4,4 +4,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "weatherApi"
+rootProject.name = "weather-forecast"
