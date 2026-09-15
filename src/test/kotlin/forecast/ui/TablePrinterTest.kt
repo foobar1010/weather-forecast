@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import java.time.LocalDate
 
 class TablePrinterTest {
     private val tablePrinter = TablePrinter()
@@ -25,12 +26,12 @@ class TablePrinterTest {
 
     @Test
     fun `prints weather data as a table`() {
-        val testDate = java.time.LocalDate.now().plusDays(1).toString()
+        val tomorrowDate = LocalDate.now().plusDays(1).toString()
 
         val weatherData = listOf(
             WeatherData(
                 city = City.KYIV,
-                date = testDate,
+                date = tomorrowDate,
                 minTemp = 10.0,
                 maxTemp = 20.0,
                 humidity = 60.0,
@@ -44,7 +45,7 @@ class TablePrinterTest {
         }
 
         assertTrue(output.contains("Kyiv"))
-        assertTrue(output.contains(testDate))
+        assertTrue(output.contains(tomorrowDate))
         assertTrue(output.contains("Min Temp: 10.0°C"))
         assertTrue(output.contains("Max Temp: 20.0°C"))
         assertTrue(output.contains("Humidity: 60%"))
