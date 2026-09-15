@@ -17,7 +17,8 @@ data class ForecastContainer(
 @Serializable
 data class ForecastDay(
     val date: String,
-    val day: DayData
+    val day: DayData,
+    val hour: List<HourData> = emptyList()
 )
 
 @Serializable
@@ -26,4 +27,10 @@ data class DayData(
     @SerialName("maxtemp_c") val maxTempC: Double,
     @SerialName("avghumidity") val humidity: Double,
     @SerialName("maxwind_kph") val maxWindKph: Double
+)
+
+@Serializable
+data class HourData(
+    val time: String,
+    @SerialName("wind_dir") val windDir: String? = null
 )

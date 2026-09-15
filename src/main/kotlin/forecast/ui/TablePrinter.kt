@@ -17,8 +17,9 @@ class TablePrinter {
         val col3Width = 16 // Max Temp (°C)
         val col4Width = 14 // Humidity (%)
         val col5Width = 16 // Wind (km/h)
+        val col6Width = 18 // Wind Dir (12:00)
 
-        val divider = "+-${"-".repeat(col1Width)}-+-${"-".repeat(col2Width)}-+-${"-".repeat(col3Width)}-+-${"-".repeat(col4Width)}-+-${"-".repeat(col5Width)}-+"
+        val divider = "+-${"-".repeat(col1Width)}-+-${"-".repeat(col2Width)}-+-${"-".repeat(col3Width)}-+-${"-".repeat(col4Width)}-+-${"-".repeat(col5Width)}-+-${"-".repeat(col6Width)}-+"
 
         println(divider)
         println(
@@ -26,7 +27,8 @@ class TablePrinter {
                     "| ${center("Min Temp (°C)", col2Width)} " +
                     "| ${center("Max Temp (°C)", col3Width)} " +
                     "| ${center("Humidity (%)", col4Width)} " +
-                    "| ${center("Wind (km/h)", col5Width)} |"
+                    "| ${center("Wind (km/h)", col5Width)} " +
+                    "| ${center("Wind Dir (12:00)", col6Width)} |"
         )
         println(divider)
 
@@ -36,7 +38,8 @@ class TablePrinter {
                         "| ${center(item.minTemp.toString(), col2Width)} " +
                         "| ${center(item.maxTemp.toString(), col3Width)} " +
                         "| ${center(item.humidity.toString(), col4Width)} " +
-                        "| ${center(item.windSpeed.toString(), col5Width)} |"
+                        "| ${center(item.windSpeed.toString(), col5Width)} " +
+                        "| ${center(item.windDirection, col6Width)} |"
             )
         }
         println(divider)

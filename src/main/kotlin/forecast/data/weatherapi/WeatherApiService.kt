@@ -19,13 +19,21 @@ internal class WeatherApiService(
 
         val dayData = response.forecast.forecastDay.first()
 
+        val windDirAtNoon = dayData.hour
+            .firstOrNull { it.time.endsWith("12:00") }
+            ?.windDir
+            ?: dayData.hour.getOrNull(12)?.windDir
+            ?: dayData.hour.firstOrNull()?.windDir
+            ?: "N/A"
+
         return WeatherData(
             city = city,
             date = dayData.date,
             minTemp = dayData.day.minTempC,
             maxTemp = dayData.day.maxTempC,
             humidity = dayData.day.humidity,
-            windSpeed = dayData.day.maxWindKph
+            windSpeed = dayData.day.maxWindKph,
+            windDirection = windDirAtNoon
         )
     }
 }

@@ -6,5 +6,6 @@ data class WeatherData(
     val minTemp: Double,
     val maxTemp: Double,
     val humidity: Double,
-    val windSpeed: Double
+    val windSpeed: Double,
+    val windDirection: String
 )
