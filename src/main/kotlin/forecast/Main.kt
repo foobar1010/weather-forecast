@@ -9,7 +9,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import kotlin.collections.isNotEmpty
 
 fun main() = runBlocking {
     val tomorrowDate = LocalDate.now().plusDays(1).toString()

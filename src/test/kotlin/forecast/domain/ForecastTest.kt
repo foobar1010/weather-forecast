@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class ForecastTest {
-
     private val api: ForecastApi = mockk()
     private val forecast = Forecast(api)
 
