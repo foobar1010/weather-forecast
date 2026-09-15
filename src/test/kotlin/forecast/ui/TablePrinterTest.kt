@@ -45,9 +45,11 @@ class TablePrinterTest {
 
         assertTrue(output.contains("Kyiv"))
         assertTrue(output.contains(testDate))
-        assertTrue(output.contains("10.0/20.0°C"))
-        assertTrue(output.contains("Hum: 60%"))
-        assertTrue(output.contains("Wind: 15.0 km/h (NW)"))
+        assertTrue(output.contains("Min Temp: 10.0°C"))
+        assertTrue(output.contains("Max Temp: 20.0°C"))
+        assertTrue(output.contains("Humidity: 60%"))
+        assertTrue(output.contains("Wind Speed: 15.0 km/h"))
+        assertTrue(output.contains("Wind Dir: NW"))
     }
 
     private fun captureOutput(block: () -> Unit): String {
