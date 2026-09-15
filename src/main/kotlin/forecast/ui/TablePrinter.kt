@@ -3,53 +3,51 @@ package forecast.ui
 import forecast.model.WeatherData
 
 class TablePrinter {
+
+    private data class Column(
+        val header: String,
+        val width: Int,
+        val getValue: (WeatherData) -> String
+    )
+
+    private val columns = listOf(
+        Column("City", 12) { it.city.apiName },
+        Column("Min Temp (°C)", 16) { "%.1f".format(it.minTemp) },
+        Column("Max Temp (°C)", 16) { "%.1f".format(it.maxTemp) },
+        Column("Humidity (%)", 14) { "%.1f".format(it.humidity) },
+        Column("Wind (km/h)", 16) { "%.1f".format(it.windSpeed) },
+        Column("Wind Dir (12:00)", 18) { it.windDirection }
+    )
+
     fun print(weatherList: List<WeatherData>) {
         if (weatherList.isEmpty()) {
-            println("No data to display.")
+            println("No weather data available to display.")
             return
         }
 
-        val date = weatherList.first().date
-        println("\nWeather forecast for $date:")
+        println("\nWeather forecast for ${weatherList.first().date}:")
 
-        val col1Width = 12 // City
-        val col2Width = 16 // Min Temp (°C)
-        val col3Width = 16 // Max Temp (°C)
-        val col4Width = 14 // Humidity (%)
-        val col5Width = 16 // Wind (km/h)
-        val col6Width = 18 // Wind Dir (12:00)
-
-        val divider = "+-${"-".repeat(col1Width)}-+-${"-".repeat(col2Width)}-+-${"-".repeat(col3Width)}-+-${"-".repeat(col4Width)}-+-${"-".repeat(col5Width)}-+-${"-".repeat(col6Width)}-+"
+        val divider = columns.joinToString(separator = "-+-", prefix = "+-", postfix = "-+") { "-".repeat(it.width) }
+        val headerRow = columns.joinToString(separator = " | ", prefix = "| ", postfix = " |") { it.header.center(it.width) }
 
         println(divider)
-        println(
-            "| ${center("City", col1Width)} " +
-                    "| ${center("Min Temp (°C)", col2Width)} " +
-                    "| ${center("Max Temp (°C)", col3Width)} " +
-                    "| ${center("Humidity (%)", col4Width)} " +
-                    "| ${center("Wind (km/h)", col5Width)} " +
-                    "| ${center("Wind Dir (12:00)", col6Width)} |"
-        )
+        println(headerRow)
         println(divider)
 
         for (item in weatherList) {
-            println(
-                "| ${center(item.city.apiName, col1Width)} " +
-                        "| ${center(item.minTemp.toString(), col2Width)} " +
-                        "| ${center(item.maxTemp.toString(), col3Width)} " +
-                        "| ${center(item.humidity.toString(), col4Width)} " +
-                        "| ${center(item.windSpeed.toString(), col5Width)} " +
-                        "| ${center(item.windDirection, col6Width)} |"
-            )
+            val row = columns.joinToString(separator = " | ", prefix = "| ", postfix = " |") { col ->
+                col.getValue(item).center(col.width)
+            }
+            println(row)
         }
+
         println(divider)
     }
 
-    private fun center(text: String, width: Int): String {
-        if (text.length >= width) return text.take(width)
-        val padding = width - text.length
-        val leftPadding = padding / 2
-        val rightPadding = padding - leftPadding
-        return " ".repeat(leftPadding) + text + " ".repeat(rightPadding)
+    private fun String.center(width: Int): String {
+        if (length >= width) return take(width)
+        val left = (width - length) / 2
+        val right = width - length - left
+        return " ".repeat(left) + this + " ".repeat(right)
     }
 }

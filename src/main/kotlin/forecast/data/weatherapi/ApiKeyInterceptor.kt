@@ -4,10 +4,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class ApiKeyInterceptor : Interceptor {
-    private val apiKey by lazy {
-        requireNotNull(System.getenv("WEATHERAPI_API_KEY")) {
-            "WEATHERAPI_API_KEY environment variable is not set"
-        }
+    private val apiKey: String = requireNotNull(System.getenv("WEATHERAPI_API_KEY")) {
+        "WEATHERAPI_API_KEY environment variable is not set. Please set it before running the app."
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

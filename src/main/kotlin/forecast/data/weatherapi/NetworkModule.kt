@@ -11,7 +11,7 @@ object NetworkModule {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    val okHttpClient: OkHttpClient by lazy {
+    private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(ApiKeyInterceptor())
             .build()

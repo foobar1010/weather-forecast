@@ -5,35 +5,20 @@ import forecast.model.City
 import forecast.model.WeatherData
 
 internal class WeatherApiService(
+    private val weatherApi: WeatherApi = WeatherApi.create(),
     private val targetDate: String? = null,
     private val days: Int? = null
 ) : ForecastApi {
-    private val weatherApi: WeatherApi = WeatherApi.create()
-
     override suspend fun getForecast(city: City): WeatherData {
         val response = weatherApi.getForecast(
             city = city.apiName,
-            date = targetDate,
-            days = days
+            days = days,
+            date = targetDate
         )
 
-        val dayData = response.forecast.forecastDay.first()
+        val forecastDay = response.forecast.forecastDay.firstOrNull()
+            ?: throw IllegalStateException("No forecast data returned for city: ${city.apiName}")
 
-        val windDirAtNoon = dayData.hour
-            .firstOrNull { it.time.endsWith("12:00") }
-            ?.windDir
-            ?: dayData.hour.getOrNull(12)?.windDir
-            ?: dayData.hour.firstOrNull()?.windDir
-            ?: "N/A"
-
-        return WeatherData(
-            city = city,
-            date = dayData.date,
-            minTemp = dayData.day.minTempC,
-            maxTemp = dayData.day.maxTempC,
-            humidity = dayData.day.humidity,
-            windSpeed = dayData.day.maxWindKph,
-            windDirection = windDirAtNoon
-        )
+        return forecastDay.toDomain(city)
     }
 }
