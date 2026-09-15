@@ -3,44 +3,40 @@ package forecast.ui
 import forecast.model.WeatherData
 
 class TablePrinter {
-
-    private data class Column(
-        val header: String,
-        val width: Int,
-        val getValue: (WeatherData) -> String
-    )
-
-    private val columns = listOf(
-        Column("City", 12) { it.city.apiName },
-        Column("Min Temp (°C)", 16) { "%.1f".format(it.minTemp) },
-        Column("Max Temp (°C)", 16) { "%.1f".format(it.maxTemp) },
-        Column("Humidity (%)", 14) { "%.1f".format(it.humidity) },
-        Column("Wind (km/h)", 16) { "%.1f".format(it.windSpeed) },
-        Column("Wind Dir (12:00)", 18) { it.windDirection }
-    )
-
     fun print(weatherList: List<WeatherData>) {
         if (weatherList.isEmpty()) {
             println("No weather data available to display.")
             return
         }
 
-        println("\nWeather forecast for ${weatherList.first().date}:")
+        val dates = weatherList.map { it.date }.distinct()
 
-        val divider = columns.joinToString(separator = "-+-", prefix = "+-", postfix = "-+") { "-".repeat(it.width) }
-        val headerRow = columns.joinToString(separator = " | ", prefix = "| ", postfix = " |") { it.header.center(it.width) }
+        val cityWidth = 12
+        val dataWidth = 55
+
+        val headerRow = "| " + "City".padEnd(cityWidth) + " | " +
+                dates.joinToString(" | ") { it.center(dataWidth) } + " |"
+
+        val divider = "+-" + "-".repeat(cityWidth) + "-+-" +
+                dates.joinToString("-+-") { "-".repeat(dataWidth) } + "-+"
 
         println(divider)
         println(headerRow)
         println(divider)
 
         for (item in weatherList) {
-            val row = columns.joinToString(separator = " | ", prefix = "| ", postfix = " |") { col ->
-                col.getValue(item).center(col.width)
-            }
+            val formattedMetrics = "%.1f/%.1f°C | Hum: %.0f%% | Wind: %.1f km/h (%s)".format(
+                item.minTemp,
+                item.maxTemp,
+                item.humidity,
+                item.windSpeed,
+                item.windDirection
+            )
+
+            val row = "| " + item.city.apiName.padEnd(cityWidth) + " | " +
+                    formattedMetrics.padEnd(dataWidth) + " |"
             println(row)
         }
-
         println(divider)
     }
 
